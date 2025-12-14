@@ -1,0 +1,89 @@
+name: Sync local edits to repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      sync_json:
+        description: "Paste JSON exported from the website (includes photos and editable texts)"
+        required: true
+        type: string
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Apply sync JSON
+        env:
+          SYNC_JSON: ${{ inputs.sync_json }}
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          const input = process.env.SYNC_JSON;
+          if (!input) { throw new Error('No sync_json provided'); }
+          const data = JSON.parse(input);
+          const { texts = {}, photos = [] } = data;
+
+          fs.mkdirSync('images', { recursive: true });
+
+          let existing = [];
+          try {
+            existing = JSON.parse(fs.readFileSync('photos.json','utf8')) || [];
+          } catch {}
+
+          const newRecords = [];
+          let idx = 0;
+          for (const p of photos) {
+            if (p.dataUrl && (p.title || p.date)) {
+              const m = p.dataUrl.match(/^data:(.*?);base64,(.*)$/);
+              if (!m) continue;
+              const mime = m[1] || 'image/jpeg';
+              const ext = mime.includes('png') ? 'png' : mime.includes('webp') ? 'webp' : 'jpg';
+              const safeName = (p.title || ('photo_'+idx)).replace(/[^a-zA-Z0-9._-]+/g,'_');
+              const fileName = `sync_${Date.now()}_${idx}_${safeName}.${ext}`;
+              const buf = Buffer.from(m[2], 'base64');
+              fs.writeFileSync(path.join('images', fileName), buf);
+              newRecords.push({ src: `images/${fileName}`, date: p.date || new Date().toISOString().slice(0,10), title: p.title || fileName, tags: Array.isArray(p.tags) ? p.tags : [] });
+              idx++;
+            } else if (p.src) {
+              newRecords.push({ src: p.src, date: p.date || '', title: p.title || '', tags: Array.isArray(p.tags) ? p.tags : [] });
+            }
+          }
+
+          const map = new Map();
+          [...newRecords, ...existing].forEach(r => { if (!map.has(r.src)) map.set(r.src, r); });
+          const merged = Array.from(map.values());
+          fs.writeFileSync('photos.json', JSON.stringify(merged, null, 2));
+
+          try {
+            if (texts && Object.keys(texts).length) {
+              let html = fs.readFileSync('index.html','utf8');
+              for (const [key, value] of Object.entries(texts)) {
+                const re = new RegExp(`(<[^>]*id=\\\"${key}\\\"[^>]*>)([\\s\\S]*?)(<\\/[^>]+>)`,'m');
+                html = html.replace(re, `$1${value}$3`);
+              }
+              fs.writeFileSync('index.html', html);
+            }
+          } catch (e) { console.error('Text update failed:', e.message); }
+          "
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add images/* photos.json index.html || true
+          git commit -m "chore: sync from workflow_dispatch" || echo "No changes to commit"
+
+      - name: Push
+        run: |
+          git push
