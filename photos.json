@@ -2,19 +2,19 @@
   {
     "src": "images/cat1_sleep.webp",
     "date": "2025-06-12",
-    "title": "午睡時光",
-    "tags": ["睡覺", "小花"]
+    "title": "香片午睡",
+    "tags": ["睡覺", "香片"]
   },
   {
     "src": "images/cat2_box.webp",
     "date": "2025-07-01",
-    "title": "紙箱王國",
-    "tags": ["玩耍", "小虎"]
+    "title": "烏龍紙箱王國",
+    "tags": ["玩耍", "烏龍"]
   },
   {
     "src": "images/cat_birthday.webp",
     "date": "2025-03-12",
-    "title": "小花生日",
-    "tags": ["生日", "小花"]
+    "title": "香片生日",
+    "tags": ["生日", "香片"]
   }
 ]

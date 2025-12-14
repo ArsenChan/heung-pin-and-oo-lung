@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>小貓回憶錄</title>
-  <meta name="description" content="記錄我們家兩隻小貓的成長、相片與故事" />
+  <title>小貓回憶錄｜香片同烏龍</title>
+  <meta name="description" content="記錄香片同烏龍嘅成長、相片同故事｜Chan’s family" />
+  <meta name="keywords" content="香片, 烏龍, 貓, 相簿, 回憶錄, 貓咪故事, Chan’s family" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
@@ -12,27 +13,28 @@
 <body>
   <header class="site-header">
     <div class="container">
-      <h1>小貓回憶錄</h1>
+      <h1 id="siteTitle" contenteditable="false">小貓回憶錄｜香片同烏龍</h1>
       <nav>
-        <a href="#gallery">相簿</a>
-        <a href="#timeline">時光軸</a>
-        <a href="#stories">故事</a>
-        <a href="#about">關於</a>
+        <a href="#gallery" id="navGallery" contenteditable="false">相簿</a>
+        <a href="#timeline" id="navTimeline" contenteditable="false">時光軸</a>
+        <a href="#stories" id="navStories" contenteditable="false">故事</a>
+        <a href="#about" id="navAbout" contenteditable="false">關於</a>
       </nav>
+      <button id="editToggle" class="edit-btn" aria-pressed="false">進入編輯模式</button>
     </div>
   </header>
 
   <main class="container">
     <section id="hero" class="hero">
-      <img src="images/cover.webp" alt="兩隻小貓的封面照" />
+      <img src="images/cover.svg" alt="香片同烏龍嘅封面相" />
       <div class="hero-text">
-        <h2>把每個可愛瞬間，留下來</h2>
-        <p>這裡收集了兩隻小貓的日常、里程碑與最喜歡的照片。</p>
+        <h2 id="heroTitle" contenteditable="false">把每個可愛嘅瞬間，留低</h2>
+        <p id="heroDesc" contenteditable="false">呢度收集咗香片同烏龍嘅日常、里程碑，同最鍾意嘅相片。</p>
       </div>
     </section>
 
     <section id="gallery">
-      <h2>相簿</h2>
+      <h2 contenteditable="false">相簿</h2>
       <div class="filters">
         <input id="search" type="search" placeholder="搜尋：生日、打瞌睡、貓名…" />
         <select id="tagFilter">
@@ -41,58 +43,84 @@
           <option value="睡覺">睡覺</option>
           <option value="玩耍">玩耍</option>
           <option value="外出">外出</option>
+          <option value="香片">香片</option>
+          <option value="烏龍">烏龍</option>
         </select>
       </div>
+
+      <div class="edit-tools" id="photoEditor" hidden>
+        <details>
+          <summary>新增相片記錄（先把檔案上載到 images/）</summary>
+          <div class="editor-grid">
+            <label>圖片路徑（例如 images/new.webp）<input id="newSrc" /></label>
+            <label>日期（YYYY-MM-DD）<input id="newDate" placeholder="2025-12-14" /></label>
+            <label>標題<input id="newTitle" placeholder="例如：香片午睡" /></label>
+            <label>標籤（用逗號分隔）<input id="newTags" placeholder="香片, 睡覺" /></label>
+            <button id="addPhoto" class="primary">加入相簿</button>
+          </div>
+        </details>
+
+        <details>
+          <summary>上載檔案（進階：用 GitHub API，上傳到 images/）</summary>
+          <p class="muted">安全提示：唔好把個人存取權杖（PAT）直接硬編碼落前端。建議用 GitHub Actions 或後端代上載。以下只提供示範按鈕，預設係關閉。</p>
+          <div class="editor-grid">
+            <label>檔案<input type="file" id="uploadFile" accept=".webp,.jpg,.jpeg,.png" /></label>
+            <label>目標檔名（例如 cover.webp）<input id="uploadFileName" placeholder="cover.webp" /></label>
+            <button id="uploadToRepo" class="secondary" disabled>上傳到 images/（示範）</button>
+          </div>
+        </details>
+      </div>
+
       <div id="galleryGrid" class="grid"></div>
     </section>
 
     <section id="timeline">
-      <h2>時光軸</h2>
-      <ul class="timeline">
+      <h2 contenteditable="false">時光軸</h2>
+      <ul class="timeline" id="timelineList">
         <li>
           <time datetime="2024-05-01">2024-05-01</time>
-          <span>第一次到家（小花、小虎）</span>
+          <span contenteditable="false">第一次到屋企（香片、烏龍）</span>
         </li>
         <li>
           <time datetime="2024-06-10">2024-06-10</time>
-          <span>第一次打疫苗</span>
+          <span contenteditable="false">第一次打疫苗</span>
         </li>
         <li>
           <time datetime="2024-08-20">2024-08-20</time>
-          <span>第一次外出散步</span>
+          <span contenteditable="false">第一次出街散步</span>
         </li>
       </ul>
     </section>
 
     <section id="stories">
-      <h2>故事</h2>
+      <h2 contenteditable="false">故事</h2>
       <article class="card">
-        <h3>小虎的第一個紙箱王國</h3>
-        <p>我們把紙箱改造成城堡，小虎立刻入住，晚上還在裡面打呼。</p>
+        <h3 contenteditable="false">烏龍嘅第一個紙箱王國</h3>
+        <p contenteditable="false">我哋將紙箱改造成城堡，烏龍即刻入住，夜晚仲喺入面打鼾。</p>
       </article>
       <article class="card">
-        <h3>小花的日光浴</h3>
-        <p>午後的陽光最舒服，小花總是躺在窗邊，眼睛瞇成小月亮。</p>
+        <h3 contenteditable="false">香片嘅日光浴</h3>
+        <p contenteditable="false">午後陽光好舒服，香片成日瞓喺窗邊，眼仔瞇到好似月亮。</p>
       </article>
     </section>
 
     <section id="about">
-      <h2>關於牠們</h2>
+      <h2 contenteditable="false">關於佢哋</h2>
       <div class="about">
-        <div>
-          <h3>小花</h3>
+        <div class="card">
+          <h3 contenteditable="false">香片</h3>
           <ul>
-            <li>生日：2024-03-12</li>
-            <li>個性：溫柔、黏人</li>
-            <li>喜歡：曬太陽、追羽毛棒</li>
+            <li contenteditable="false">生日：2024-03-12</li>
+            <li contenteditable="false">性格：溫柔、黐人</li>
+            <li contenteditable="false">鍾意：曬太陽、追羽毛棒</li>
           </ul>
         </div>
-        <div>
-          <h3>小虎</h3>
+        <div class="card">
+          <h3 contenteditable="false">烏龍</h3>
           <ul>
-            <li>生日：2024-02-25</li>
-            <li>個性：好奇、冒險</li>
-            <li>喜歡：紙箱、巡邏家裡每個角落</li>
+            <li contenteditable="false">生日：2024-02-25</li>
+            <li contenteditable="false">性格：好奇、冒險</li>
+            <li contenteditable="false">鍾意：紙箱、巡邏屋企每個角落</li>
           </ul>
         </div>
       </div>
@@ -101,7 +129,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <small>© <span id="year"></span> 小貓回憶錄 · 由愛與喵喵驅動</small>
+      <small id="footerText" contenteditable="false">© <span id="year"></span> Chan’s family</small>
     </div>
   </footer>
 

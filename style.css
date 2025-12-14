@@ -23,11 +23,24 @@ html, body {
   border-bottom: 1px solid var(--border);
   background: #fff;
   position: sticky; top: 0; z-index: 10;
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
 }
 .site-header h1 { margin: 12px 0; font-size: 22px; }
 .site-header nav { display: flex; gap: 12px; flex-wrap: wrap; padding-bottom: 12px; }
 .site-header a { color: var(--muted); text-decoration: none; }
 .site-header a:hover { color: var(--text); }
+.edit-btn {
+  border: 1px solid var(--border);
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.edit-btn[aria-pressed="true"] {
+  background: var(--primary);
+  color: #222;
+  border-color: var(--primary);
+}
 
 .hero {
   display: grid;
@@ -94,6 +107,20 @@ h2 { margin-top: 32px; }
   padding: 2px 8px;
   font-size: 12px;
 }
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  gap: 8px;
+  margin: 8px 0 16px;
+}
+.editor-grid label {
+  display: grid; gap: 6px;
+}
+.muted { color: var(--muted); font-size: 14px; }
+.primary { background: var(--primary); border: 1px solid var(--primary); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.secondary { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+
 @media (max-width: 800px) {
   .hero { grid-template-columns: 1fr; }
   .grid { grid-template-columns: repeat(2, 1fr); }
