@@ -1,9 +1,9 @@
-// 自動同步預留接口、描述與兩個標籤上載、標籤搜尋、背景顏色/封面工具恢復、長按刪單張
+// 描述顯示左下、標籤顯示右下（從預設清單選兩個）、搜尋支援標籤、移除空白與壞圖卡片、背景/封面工具恢復
 let photos = [];
 let editMode = false;
 
-// 後端 API（GitHub App/雲端函式）。設定後將在變更時自動同步。
-const SYNC_ENDPOINT = ""; // 例如 https://your-app.example.com/sync
+// 自動同步後端（GitHub App/雲端函式）—安裝完成後填入 URL 即可自動同步
+const SYNC_ENDPOINT = ""; // 例：'https://your-app.example.com/sync'
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindBackgroundTools();
   bindStoryTimelineTools();
   enableAboutEditable(false);
-  autoSyncIfConfigured(); // 首次載入可視需要同步
+  autoSyncIfConfigured();
 });
 
 async function loadPhotos() {
@@ -41,15 +41,16 @@ function renderGallery(list) {
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = (list||[]).map((p, idx) => {
     const src = p.dataUrl || p.src;
-    const alt = p.title || '相片';
-    const desc = p.desc || '';
-    const tags = Array.isArray(p.tags) ? p.tags : [];
+    const desc = p.desc || ''; // 描述左下
+    const date = p.date || '';
+    const tags = Array.isArray(p.tags) ? p.tags : []; // 標籤右下
     return `
     <figure class="photo" data-idx="${idx}">
-      <img src="${src}" alt="${alt}" loading="lazy" onerror="this.onerror=null;this.remove();">
+      <img src="${src}" alt="${desc || '相片'}" loading="lazy"
+           onerror="this.onerror=null; const fig=this.closest('figure'); fig && fig.remove();">
       <figcaption class="meta">
-        <div>${alt}${desc ? ' · ' + escapeHTML(desc) : ''} · <time datetime="${p.date||''}">${p.date||''}</time></div>
-        <div class="tags">${tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>
+        <div class="meta-left">${escapeHTML(desc)}${date ? ' · ' + date : ''}</div>
+        <div class="meta-right">${tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>
       </figcaption>
     </figure>`;
   }).join('');
@@ -63,7 +64,7 @@ function setupFilters(base) {
     const q = (search.value||'').trim().toLowerCase();
     const tag = tagFilter.value;
     const filtered = base.filter(p => {
-      const text = `${p.title||''} ${(p.desc||'')} ${(p.tags||[]).join(' ')}`.toLowerCase();
+      const text = `${p.desc||''} ${(p.tags||[]).join(' ')}`.toLowerCase();
       const inText = !q || text.includes(q);
       const inTag = !tag || (p.tags||[]).includes(tag);
       return inText && inTag;
@@ -87,7 +88,7 @@ function bindEditToggle() {
     enableAboutEditable(editMode);
     if (!editMode) {
       saveEditableTexts();
-      autoSyncIfConfigured(); // 編輯完成後自動同步
+      autoSyncIfConfigured();
     }
   });
 }
@@ -154,7 +155,7 @@ function bindStoryTimelineTools() {
     addTL.addEventListener('click', () => {
       const ul = document.getElementById('timelineList');
       const li = document.createElement('li');
-      li.innerHTML = '<time datetime="" contenteditable="true">YYYY-MM-DD</time> <span contenteditable="true">里程碑內容</span>';
+      li.innerHTML = '<time datetime="" contenteditable="true">YYYY-MM-DD</time> <span contenteditable="true">里程碑內容</span>'; 
       ul.prepend(li);
     });
   }
@@ -169,7 +170,7 @@ function bindBackgroundTools() {
       const val = e.target.value;
       document.documentElement.style.setProperty('--bg', val);
       localStorage.setItem('bgColor', val);
-      autoSyncIfConfigured(); // 背景色變更後自動同步
+      autoSyncIfConfigured();
     });
   }
   const heroUpload = document.getElementById('heroUpload');
@@ -180,7 +181,7 @@ function bindBackgroundTools() {
       const dataUrl = await fileToDataURL(file, 1600);
       document.getElementById('heroImage').src = dataUrl;
       localStorage.setItem('heroImage', dataUrl);
-      autoSyncIfConfigured(); // 封面圖變更後自動同步
+      autoSyncIfConfigured();
     });
     const savedHero = localStorage.getItem('heroImage');
     if (savedHero) document.getElementById('heroImage').src = savedHero;
@@ -190,19 +191,18 @@ function bindBackgroundTools() {
 function bindLocalUpload() {
   const input = document.getElementById('localUpload');
   const descInput = document.getElementById('uploadDesc');
-  const tagsInput = document.getElementById('uploadTags');
+  const tagSelect = document.getElementById('uploadTagSelect');
   if (!input) return;
   input.addEventListener('change', async e => {
     const files = Array.from(e.target.files||[]);
     const newRecords = [];
     const desc = (descInput?.value || '').trim();
-    const tagsRaw = (tagsInput?.value || '').trim();
-    const tags = tagsRaw ? tagsRaw.split(',').map(s => s.trim()).filter(Boolean).slice(0,2) : [];
+    const tags = getSelectedTags(tagSelect).slice(0, 2); // 最多兩個
     for (const f of files) {
       const dataUrl = await fileToDataURL(f, 1600);
       newRecords.push({
         dataUrl,
-        title: f.name,
+        title: '', // 不用檔名作為顯示文字
         desc,
         date: new Date().toISOString().slice(0,10),
         tags
@@ -212,8 +212,13 @@ function bindLocalUpload() {
     const merged = cleanupInvalid([...newRecords, ...existing]);
     localStorage.setItem('catLocalPhotos', JSON.stringify(merged));
     renderGallery([...merged, ...photos]);
-    autoSyncIfConfigured(); // 上載相片後自動同步
+    autoSyncIfConfigured();
   });
+}
+
+function getSelectedTags(select) {
+  if (!select) return [];
+  return Array.from(select.selectedOptions).map(opt => opt.value);
 }
 
 function enableLongPressDelete() {
@@ -228,8 +233,8 @@ function enableLongPressDelete() {
         const src = img?.getAttribute('src') || '';
         const remained = local.filter(p => (p.dataUrl||p.src) !== src);
         localStorage.setItem('catLocalPhotos', JSON.stringify(remained));
-        renderGallery([...remained, ...photos]);
-        autoSyncIfConfigured(); // 刪除相片後自動同步
+        fig.remove();
+        autoSyncIfConfigured();
       }, 800);
     };
     const cancel = () => clearTimeout(timer);
@@ -247,9 +252,9 @@ function getLocalPhotos() {
   try { return JSON.parse(raw)||[]; } catch { return []; }
 }
 
-// 自動同步：如設定了 SYNC_ENDPOINT，將本機資料（文字/相片/主題/封面）POST 到後端
+// 自動同步：若設定 SYNC_ENDPOINT，將本機資料 POST 到後端，由後端寫入倉庫
 async function autoSyncIfConfigured() {
-  if (!SYNC_ENDPOINT) return; // 未配置後端則不執行
+  if (!SYNC_ENDPOINT) return;
   const payload = collectSyncPayload();
   try {
     const res = await fetch(SYNC_ENDPOINT, {
@@ -258,8 +263,6 @@ async function autoSyncIfConfigured() {
       body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error(`Sync failed: ${res.status}`);
-    // 後端成功寫入 repo 後，建議回傳最新照片資料；可視需要重新載入
-    // await loadPhotos();
   } catch (e) {
     console.warn('自動同步失敗（稍後可再試）：', e.message);
   }
@@ -297,5 +300,5 @@ function fileToDataURL(file, maxWidth=1600) {
 }
 
 function escapeHTML(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
 }

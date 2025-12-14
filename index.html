@@ -36,7 +36,7 @@
     <section id="gallery">
       <h2 id="galleryTitle" contenteditable="false">相簿</h2>
       <div class="filters">
-        <input id="search" type="search" placeholder="搜尋：標題、描述、標籤…" />
+        <input id="search" type="search" placeholder="搜尋：描述、標籤…" />
         <select id="tagFilter">
           <option value="">全部標籤</option>
           <option value="生日">生日</option>
@@ -55,11 +55,19 @@
             <label>揀相（支援手機相簿）
               <input type="file" id="localUpload" accept=".webp,.jpg,.jpeg,.png" multiple />
             </label>
-            <label>描述（可選）
+            <label>描述（顯示喺左下角）
               <input id="uploadDesc" placeholder="例如：香片午睡好可愛" />
             </label>
-            <label>標籤（最多兩個，用逗號分隔）
-              <input id="uploadTags" placeholder="例如：香片, 睡覺" />
+            <label>標籤（最多揀兩個）
+              <select id="uploadTagSelect" multiple size="6">
+                <option value="生日">生日</option>
+                <option value="睡覺">睡覺</option>
+                <option value="玩耍">玩耍</option>
+                <option value="外出">外出</option>
+                <option value="香片">香片</option>
+                <option value="烏龍">烏龍</option>
+              </select>
+              <small class="muted">按住 Ctrl/Command 可多選，最多兩個。</small>
             </label>
           </div>
         </details>
