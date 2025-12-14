@@ -1,4 +1,4 @@
-// 編輯模式與相片渲染（長按刪單張、背景色修正、About全可編輯）
+// 編輯模式與相片渲染（長按刪單張、背景色修正、About全可編輯、同步到倉庫導出）
 let photos = [];
 let editMode = false;
 
@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindBackgroundTools();
   bindStoryTimelineTools();
   enableAboutEditable(false);
+  bindSyncTools();
 });
 
 async function loadPhotos() {
@@ -70,6 +71,7 @@ function bindEditToggle() {
     document.getElementById('photoEditor').hidden = !editMode;
     document.getElementById('timelineTools').hidden = !editMode;
     document.getElementById('storyTools').hidden = !editMode;
+    document.getElementById('syncTools').hidden = !editMode;
     enableAboutEditable(editMode);
     if (!editMode) saveEditableTexts();
   });
@@ -209,6 +211,36 @@ function getLocalPhotos() {
   const raw = localStorage.getItem('catLocalPhotos');
   if (!raw) return [];
   try { return JSON.parse(raw)||[]; } catch { return []; }
+}
+
+function collectSyncPayload() {
+  const texts = {};
+  document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    if (el.id) texts[el.id] = el.innerHTML;
+  });
+  const photos = getLocalPhotos();
+  return { texts, photos };
+}
+
+function bindSyncTools() {
+  const btn = document.getElementById('exportSync');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    const payload = collectSyncPayload();
+    const json = JSON.stringify(payload);
+    try {
+      await navigator.clipboard.writeText(json);
+      alert('已複製同步資料到剪貼簿：到 Actions → Sync local edits to repo → Run workflow，貼上 sync_json 即可。');
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = json;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alert('已複製同步資料到剪貼簿。');
+    }
+  });
 }
 
 function fileToDataURL(file, maxWidth=1600) {
