@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>小貓回憶錄</title>
+  <meta name="description" content="記錄我們家兩隻小貓的成長、相片與故事" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>小貓回憶錄</h1>
+      <nav>
+        <a href="#gallery">相簿</a>
+        <a href="#timeline">時光軸</a>
+        <a href="#stories">故事</a>
+        <a href="#about">關於</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="hero" class="hero">
+      <img src="images/cover.webp" alt="兩隻小貓的封面照" />
+      <div class="hero-text">
+        <h2>把每個可愛瞬間，留下來</h2>
+        <p>這裡收集了兩隻小貓的日常、里程碑與最喜歡的照片。</p>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <h2>相簿</h2>
+      <div class="filters">
+        <input id="search" type="search" placeholder="搜尋：生日、打瞌睡、貓名…" />
+        <select id="tagFilter">
+          <option value="">全部標籤</option>
+          <option value="生日">生日</option>
+          <option value="睡覺">睡覺</option>
+          <option value="玩耍">玩耍</option>
+          <option value="外出">外出</option>
+        </select>
+      </div>
+      <div id="galleryGrid" class="grid"></div>
+    </section>
+
+    <section id="timeline">
+      <h2>時光軸</h2>
+      <ul class="timeline">
+        <li>
+          <time datetime="2024-05-01">2024-05-01</time>
+          <span>第一次到家（小花、小虎）</span>
+        </li>
+        <li>
+          <time datetime="2024-06-10">2024-06-10</time>
+          <span>第一次打疫苗</span>
+        </li>
+        <li>
+          <time datetime="2024-08-20">2024-08-20</time>
+          <span>第一次外出散步</span>
+        </li>
+      </ul>
+    </section>
+
+    <section id="stories">
+      <h2>故事</h2>
+      <article class="card">
+        <h3>小虎的第一個紙箱王國</h3>
+        <p>我們把紙箱改造成城堡，小虎立刻入住，晚上還在裡面打呼。</p>
+      </article>
+      <article class="card">
+        <h3>小花的日光浴</h3>
+        <p>午後的陽光最舒服，小花總是躺在窗邊，眼睛瞇成小月亮。</p>
+      </article>
+    </section>
+
+    <section id="about">
+      <h2>關於牠們</h2>
+      <div class="about">
+        <div>
+          <h3>小花</h3>
+          <ul>
+            <li>生日：2024-03-12</li>
+            <li>個性：溫柔、黏人</li>
+            <li>喜歡：曬太陽、追羽毛棒</li>
+          </ul>
+        </div>
+        <div>
+          <h3>小虎</h3>
+          <ul>
+            <li>生日：2024-02-25</li>
+            <li>個性：好奇、冒險</li>
+            <li>喜歡：紙箱、巡邏家裡每個角落</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> 小貓回憶錄 · 由愛與喵喵驅動</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
