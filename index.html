@@ -36,7 +36,7 @@
     <section id="gallery">
       <h2 id="galleryTitle" contenteditable="false">相簿</h2>
       <div class="filters">
-        <input id="search" type="search" placeholder="搜尋：生日、打瞌睡、貓名…" />
+        <input id="search" type="search" placeholder="搜尋：標題、描述、標籤…" />
         <select id="tagFilter">
           <option value="">全部標籤</option>
           <option value="生日">生日</option>
@@ -52,22 +52,26 @@
         <details open>
           <summary>有咩相想Upload？</summary>
           <div class="editor-grid">
-            <label>揀相（支援手機相簿）<input type="file" id="localUpload" accept=".webp,.jpg,.jpeg,.png" multiple /></label>
+            <label>揀相（支援手機相簿）
+              <input type="file" id="localUpload" accept=".webp,.jpg,.jpeg,.png" multiple />
+            </label>
+            <label>描述（可選）
+              <input id="uploadDesc" placeholder="例如：香片午睡好可愛" />
+            </label>
+            <label>標籤（最多兩個，用逗號分隔）
+              <input id="uploadTags" placeholder="例如：香片, 睡覺" />
+            </label>
           </div>
         </details>
-        <details>
+        <details open>
           <summary>頁面背景同封面</summary>
           <div class="editor-grid">
             <label>背景顏色<input type="color" id="bgColorPicker" /></label>
-            <label>封面相（即時替換）<input type="file" id="heroUpload" accept=".webp,.jpg,.jpeg,.png" /></label>
+            <label>封面相（即時替換）
+              <input type="file" id="heroUpload" accept=".webp,.jpg,.jpeg,.png" />
+            </label>
           </div>
         </details>
-      </div>
-
-      <!-- 同步到倉庫工具 -->
-      <div id="syncTools" class="edit-tools" hidden>
-        <button id="exportSync" class="primary">同步到倉庫（複製資料）</button>
-        <p class="muted">按下會複製同步資料到剪貼簿，然後到 Actions → Sync local edits to repo → Run workflow，貼上資料即可。</p>
       </div>
 
       <div id="galleryGrid" class="grid"></div>
