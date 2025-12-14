@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>小貓回憶錄｜香片同烏龍</title>
-  <meta name="description" content="記錄香片同烏龍嘅成長、相片同故事｜Chan’s family" />
-  <meta name="keywords" content="香片, 烏龍, 貓, 相簿, 回憶錄, 貓咪故事, Chan’s family" />
+  <meta name="description" content="記錄香片同烏龍嘅成長、相片同故事" />
+  <meta name="keywords" content="香片, 烏龍, 貓, 相簿, 回憶錄, 貓咪故事" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
@@ -50,30 +50,16 @@
 
       <div class="edit-tools" id="photoEditor" hidden>
         <details open>
-          <summary>手機直接上載相片到頁面（無需登入，僅保存在你部機）</summary>
+          <summary>有咩相想Upload？</summary>
           <div class="editor-grid">
             <label>揀相（支援手機相簿）<input type="file" id="localUpload" accept=".webp,.jpg,.jpeg,.png" multiple /></label>
-            <button id="clearLocalPhotos" class="secondary">清除本機相片</button>
-            <p class="muted">提示：呢個方法會將相片以本機瀏覽器方式儲存（localStorage），唔需要 GitHub 帳戶或權杖，方便手機用家即時展示；但喺其他裝置睇唔到。要永久保存同跨裝置可見，請稍後用「同步到倉庫」功能或我幫你設定 GitHub Actions。</p>
           </div>
         </details>
-
-        <details>
-          <summary>新增相片記錄（指向 images/ 目錄嘅檔案）</summary>
-          <div class="editor-grid">
-            <label>圖片路徑（例如 images/new.webp）<input id="newSrc" /></label>
-            <label>日期（YYYY-MM-DD）<input id="newDate" placeholder="2025-12-14" /></label>
-            <label>標題<input id="newTitle" placeholder="例如：香片午睡" /></label>
-            <label>標籤（用逗號分隔）<input id="newTags" placeholder="香片, 睡覺" /></label>
-            <button id="addPhoto" class="primary">加入相簿</button>
-          </div>
-        </details>
-
         <details>
           <summary>頁面背景同封面</summary>
           <div class="editor-grid">
             <label>背景顏色<input type="color" id="bgColorPicker" /></label>
-            <label>封面相（會即時替換）<input type="file" id="heroUpload" accept=".webp,.jpg,.jpeg,.png" /></label>
+            <label>封面相（即時替換）<input type="file" id="heroUpload" accept=".webp,.jpg,.jpeg,.png" /></label>
           </div>
         </details>
       </div>
@@ -93,7 +79,7 @@
           <span contenteditable="false">第一次打疫苗</span>
         </li>
         <li>
-          <time datetime="2024-08-20" contenteditable="false">2024-08-20</span>
+          <time datetime="2024-08-20" contenteditable="false">2024-08-20</time>
           <span contenteditable="false">第一次出街散步</span>
         </li>
       </ul>

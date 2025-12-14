@@ -7,6 +7,5 @@
   </defs>
   <rect x="0" y="0" width="1200" height="900" fill="url(#g)"/>
   <rect x="50" y="50" width="1100" height="800" rx="24" fill="#ffffff" stroke="#eee"/>
-  <text x="600" y="450" text-anchor="middle" font-family="Noto Sans TC, Arial" font-size="48" fill="#555">香片同烏龍｜Chan’s family</text>
-  <text x="600" y="500" text-anchor="middle" font-family="Noto Sans TC, Arial" font-size="24" fill="#888">上載你的封面相到 images/cover.webp 取代此佔位圖</text>
+  <text x="600" y="470" text-anchor="middle" font-family="Noto Sans TC, Arial" font-size="64" fill="#555">香片同烏龍</text>
 </svg>
